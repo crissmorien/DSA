@@ -1,0 +1,54 @@
+#include<iostream>
+using namespace std;
+
+struct Node {
+char data;
+Node* left;
+Node* right;
+Node(char value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+void inorderTraversal(Node* root) {
+if (root != nullptr) {
+inorderTraversal(root->left);
+cout << root->data << " ";
+inorderTraversal(root->right);
+}
+}
+
+void preorderTraversal(Node* root) {
+if (root != nullptr) {
+cout << root->data << " ";
+preorderTraversal(root->left);
+preorderTraversal(root->right);
+}
+}
+
+void postorderTraversal(Node* root) {
+if (root != nullptr) {
+postorderTraversal(root->left);
+postorderTraversal(root->right);
+cout << root->data << " ";
+}
+}
+
+int main() {
+
+Node* root = new Node('A');
+root->left = new Node('B');
+root->right = new Node('C');
+root->left->left = new Node('D');
+root->left->right = new Node('E');
+
+cout << "In-order traversal: ";
+inorderTraversal(root);
+cout << endl;
+
+cout << "Pre-order traversal: ";
+preorderTraversal(root);
+cout << endl;
+
+cout << "Post-order traversal: ";
+postorderTraversal(root);
+cout << endl;
+}

@@ -1,0 +1,91 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct Student {
+    int rollNo;
+    string name;
+    float sgpa;
+};
+
+void insertionSort(Student students[], int n) {
+    for (int i = 1; i < n; i++) {
+        Student key = students[i];
+        int j = i - 1;
+        while (j >= 0 && students[j].name > key.name) {
+            students[j + 1] = students[j];
+            j--;
+        }
+        students[j + 1] = key;
+    }
+}
+
+int partition(Student students[], int low, int high) {
+    float pivot = students[high].sgpa;
+    int i = low - 1;
+    for (int j = low; j <= high - 1; j++) {
+        if (students[j].sgpa >= pivot) {
+            i++;
+            swap(students[i], students[j]);
+}
+    }
+    swap(students[i + 1], students[high]);
+    return i + 1;
+}
+vector<Student> searchBySGPA(Student students[], int n, float targetSGPA) {
+    vector<Student> matchingStudents;
+    for (int i = 0; i < n; i++) {
+        if (students[i].sgpa == targetSGPA) {
+            matchingStudents.push_back(students[i]);
+        }
+    }
+return matchingStudents;
+}
+int main() {
+    const int maxSize = 15;  
+    Student students[maxSize];
+    int n;
+    cout << "Enter the number of students (at least 15): ";
+    cin >> n;
+    if (n < 15 || n > maxSize) {
+        cout << "Invalid number of students. Please enter at least 15 students." << endl;
+        return 1;
+    }
+for (int i = 0; i < n; i++) {
+        cout << "Enter Roll No for student " << i + 1 << ": ";
+        cin >> students[i].rollNo;
+        cout << "Enter Name for student " << i + 1 << ": ";
+        cin.ignore(); 
+        getline(cin, students[i].name);
+        cout << "Enter SGPA for student " << i + 1 << ": ";
+        cin >> students[i].sgpa;
+    }
+   
+    insertionSort(students, n);
+    
+    cout << "\nStudent Database (Sorted by SGPA):\n";
+    cout << "---------------------------------\n";
+    cout << "Roll No\tName\tSGPA\n";
+    for (int i = 0; i < n; i++) {
+        cout << students[i].rollNo << "\t" << students[i].name << "\t" << students[i].sgpa << endl;
+    }
+    cout << "---------------------------------\n";
+    float targetSGPA;
+    cout << "Enter SGPA to search: ";
+    cin >> targetSGPA;
+    vector<Student> matchingStudents = searchBySGPA(students, n, targetSGPA);
+    if (!matchingStudents.empty()) {
+        cout << "\nStudents with SGPA " << targetSGPA << ":\n";
+        cout << "-----------------------------\n";
+        cout << "Roll No\tName\tSGPA\n";
+        for (const auto& student : matchingStudents) {
+            cout << student.rollNo << "\t" << student.name << "\t" << student.sgpa << endl;
+        }
+        cout << "-----------------------------\n";
+    } else {
+cout << "No students found with SGPA " << targetSGPA << endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Student {
+int rollNo;
+char name[50];
+float sgpa;
+};
+
+void swap(struct Student* a, struct Student* b) {
+struct Student temp = *a;
+*a = *b;
+*b = temp;
+}
+
+int partition(struct Student arr[], int low, int high) {
+float pivot = arr[high].sgpa;
+int i = low - 1;
+for (int j = low; j < high; j++) {
+if (arr[j].sgpa >= pivot) {
+i++;
+swap(&arr[i], &arr[j]);
+}
+}
+swap(&arr[i + 1], &arr[high]);
+return i + 1;
+}
+
+void quickSort(struct Student arr[], int low, int high) {
+if (low < high) {
+int pi = partition(arr, low, high);
+quickSort(arr, low, pi - 1);
+quickSort(arr, pi + 1, high);
+}
+}
+int main() {
+
+struct Student students[] = {
+{101, "John", 8.5},
+{102, "Alice", 9.2},
+
+{115, "Bob", 7.8}
+};
+int numStudents = sizeof(students) / sizeof(students[0]);
+
+quickSort(students, 0, numStudents - 1);
+
+printf("Top 10 Students:\n");
+int topCount = 10;
+if (numStudents < 10) {
+topCount = numStudents;
+}
+for (int i = 0; i < topCount; i++) {
+printf("Roll No: %d, Name: %s, SGPA: %.2f\n", students[i].rollNo, students[i].name, students[i].sgpa);
+}
+return 0;
+}
